@@ -1,0 +1,12 @@
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Type = Package
+Target = *
+Target = !breakcheck
+
+[Action]
+Description = Checking for unread Arch News items with breakcheck...
+When = PreTransaction
+Exec = /usr/bin/breakcheck
+AbortOnFail

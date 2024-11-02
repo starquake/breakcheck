@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Arch Linux: Recent news updates</title>
+        <link>https://archlinux.org/news/</link>
+        <description>The latest and greatest news from the Arch Linux distribution.</description>
+        <atom:link href="https://archlinux.org/feeds/news/" rel="self"/>
+        <language>en-us</language>
+        <lastBuildDate>Sat, 14 Sep 2024 11:40:54 +0000</lastBuildDate>
+<!--        <item>-->
+<!--            <title>Manual intervention for pacman 7.0.0 and local repositories required</title>-->
+<!--            <link>https://archlinux.org/news/manual-intervention-for-pacman-700-and-local-repositories-required/</link>-->
+<!--            <description>&lt;p&gt;With the release of &lt;a-->
+<!--                href="https://gitlab.archlinux.org/pacman/pacman/-/blob/master/NEWS?ref_type=heads"&gt;version 7.0.0&lt;/a&gt;-->
+<!--                pacman has added support for-->
+<!--                downloading packages as a separate user with dropped privileges.&lt;/p&gt;-->
+<!--                &lt;p&gt;For users with local repos however this might imply that the download-->
+<!--                user does not have access to the files in question, which can be fixed-->
+<!--                by assigning the files and folder to the &lt;code&gt;alpm&lt;/code&gt; group and ensuring the-->
+<!--                executable bit (&lt;code&gt;+x&lt;/code&gt;) is set on the folders in question.&lt;/p&gt;-->
+<!--                &lt;pre&gt;&lt;code&gt;$ chown :alpm -R /path/to/local/repo-->
+<!--                &lt;/code&gt;&lt;/pre&gt;-->
+<!--                &lt;p&gt;Remember to &lt;a href="https://wiki.archlinux.org/title/Pacman/Pacnew_and_Pacsave"&gt;merge-->
+<!--                the .pacnew&lt;/a&gt; files to apply the new default.&lt;/p&gt;-->
+<!--                &lt;p&gt;Pacman also introduced &lt;a-->
+<!--                href="https://gitlab.archlinux.org/pacman/pacman/-/commit/9548d6cc765b1a8dcf933e8b1b89d0bcc3e50209"&gt;a-->
+<!--                change&lt;/a&gt; to improve checksum stability for-->
+<!--                git repos that utilize &lt;code&gt;.gitattributes&lt;/code&gt; files. This might require a-->
+<!--                one-time checksum change for &lt;code&gt;PKGBUILD&lt;/code&gt;s that use git sources.&lt;/p&gt;-->
+<!--            </description>-->
+<!--            <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Morten Linderud</dc:creator>-->
+<!--            <pubDate>Sat, 14 Sep 2024 11:40:54 +0000</pubDate>-->
+<!--            <guid isPermaLink="false">-->
+<!--                tag:archlinux.org,2024-09-14:/news/manual-intervention-for-pacman-700-and-local-repositories-required/-->
+<!--            </guid>-->
+<!--        </item>-->
+<!--        <item>-->
+<!--            <title>The sshd service needs to be restarted after upgrading to openssh-9.8p1</title>-->
+<!--            <link>https://archlinux.org/news/the-sshd-service-needs-to-be-restarted-after-upgrading-to-openssh-98p1/-->
+<!--            </link>-->
+<!--            <description>&lt;p&gt;After upgrading to &lt;code&gt;openssh-9.8p1&lt;/code&gt;, the existing SSH daemon-->
+<!--                will be unable to accept new connections (see &lt;a-->
+<!--                href="https://gitlab.archlinux.org/archlinux/packaging/packages/openssh/-/issues/5"&gt;https://gitlab.archlinux.org/archlinux/packaging/packages/openssh/-/issues/5&lt;/a&gt;).&lt;br-->
+<!--                /&gt;-->
+<!--                When upgrading remote hosts, please make sure to restart the sshd service-->
+<!--                using &lt;code&gt;systemctl try-restart sshd&lt;/code&gt; right after upgrading.&lt;/p&gt;-->
+<!--                &lt;p&gt;We are evaluating the possibility to automatically apply a restart of the sshd service on-->
+<!--                upgrade in a future release of the openssh-9.8p1 package.&lt;/p&gt;-->
+<!--            </description>-->
+<!--            <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Robin Candau</dc:creator>-->
+<!--            <pubDate>Mon, 01 Jul 2024 16:40:26 +0000</pubDate>-->
+<!--            <guid isPermaLink="false">-->
+<!--                tag:archlinux.org,2024-07-01:/news/the-sshd-service-needs-to-be-restarted-after-upgrading-to-openssh-98p1/-->
+<!--            </guid>-->
+<!--        </item>-->
+<!--        <item>-->
+<!--            <title>Arch Linux 2024 Leader Election Results</title>-->
+<!--            <link>https://archlinux.org/news/arch-linux-2024-leader-election-results/</link>-->
+<!--            <description>&lt;p&gt;Recently we held our leader election, and the previous Project Leader Levente-->
+<!--                "anthraxx" Polyák ran again while no other people were nominated for the role.&lt;/p&gt;-->
+<!--                &lt;p&gt;As per &lt;a href="https://wiki.archlinux.org/title/DeveloperWiki:Project_Leader#Election"&gt;our-->
+<!--                election rules&lt;/a&gt; he is re-elected for a new term.&lt;/p&gt;-->
+<!--                &lt;p&gt;The role of of the project lead within Arch Linux is connected to &lt;a-->
+<!--                href="https://wiki.archlinux.org/title/DeveloperWiki:Project_Leader#Roles"&gt;a few-->
+<!--                responsibilities&lt;/a&gt; regarding decision making (when no consensus can be reached), handling-->
+<!--                financial matters with SPI and overall project management tasks.&lt;/p&gt;-->
+<!--                &lt;p&gt;&lt;strong&gt;Congratulations to Levente and all the best wishes for another successful term!-->
+<!--                🥳&lt;/strong&gt;&lt;/p&gt;-->
+<!--            </description>-->
+<!--            <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Christian Heusel</dc:creator>-->
+<!--            <pubDate>Mon, 15 Apr 2024 06:56:46 +0000</pubDate>-->
+<!--            <guid isPermaLink="false">tag:archlinux.org,2024-04-15:/news/arch-linux-2024-leader-election-results/</guid>-->
+<!--        </item>-->
+<!--        <item>-->
+<!--            <title>Increasing the default vm.max_map_count value</title>-->
+<!--            <link>https://archlinux.org/news/increasing-the-default-vmmax_map_count-value/</link>-->
+<!--            <description>&lt;p&gt;The &lt;a href="https://docs.kernel.org/admin-guide/sysctl/vm.html#max-map-count"&gt;vm.max_map_count&lt;/a&gt;-->
+<!--                parameter will be increased from the default &lt;code&gt;65530&lt;/code&gt; value to &lt;code&gt;1048576&lt;/code&gt;.&lt;/p&gt;-->
+<!--                &lt;p&gt;This change should help address performance, crash or start-up issues for a number of memory-->
+<!--                intensive applications, particularly for (but not limited to) &lt;a-->
+<!--                href="https://bugs.launchpad.net/ubuntu/+source/linux/+bug/2057792/comments/5"&gt;some Windows games&lt;/a&gt;-->
+<!--                played through Wine/Steam Proton. Overall, end users should have a smoother experience out of the box-->
+<!--                with no expressed concerns about potential downsides in &lt;a-->
+<!--                href="https://lists.archlinux.org/archives/list/arch-dev-public@lists.archlinux.org/thread/5GU7ZUFI25T2IRXIQ62YYERQKIPE3U6E/"&gt;the-->
+<!--                related proposal on arch-dev-public mailing list&lt;/a&gt;.&lt;/p&gt;-->
+<!--                &lt;p&gt;This &lt;code&gt;vm.max_map_count&lt;/code&gt; increase is introduced in the &lt;code&gt;2024.04.07-1&lt;/code&gt;-->
+<!--                release of the &lt;a href="https://archlinux.org/packages/core/any/filesystem/"&gt;filesystem package&lt;/a&gt;-->
+<!--                and will be effective right after the upgrade.&lt;/p&gt;-->
+<!--                &lt;p&gt;Before upgrading, in case you are already setting your own value for that parameter in a &lt;code&gt;sysctl.d&lt;/code&gt;-->
+<!--                configuration file, either remove it (to switch to the new default value) or make sure your-->
+<!--                configuration file will be read &lt;a-->
+<!--                href="https://man.archlinux.org/man/sysctl.8#SYSTEM_FILE_PRECEDENCE"&gt;with a higher priority&lt;/a&gt;-->
+<!--                than the &lt;code&gt;/usr/lib/sysctl.d/10-arch.conf&lt;/code&gt; file (to supersede the new default-->
+<!--                value).&lt;/p&gt;-->
+<!--            </description>-->
+<!--            <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Robin Candau</dc:creator>-->
+<!--            <pubDate>Sun, 07 Apr 2024 18:12:44 +0000</pubDate>-->
+<!--            <guid isPermaLink="false">tag:archlinux.org,2024-04-07:/news/increasing-the-default-vmmax_map_count-value/-->
+<!--            </guid>-->
+<!--        </item>-->
+<!--        <item>-->
+<!--            <title>The xz package has been backdoored</title>-->
+<!--            <link>https://archlinux.org/news/the-xz-package-has-been-backdoored/</link>-->
+<!--            <description>&lt;p&gt;&lt;strong&gt;Update:&lt;/strong&gt; To our knowledge the malicious code which was-->
+<!--                distributed via-->
+<!--                the release tarball never made it into the Arch Linux provided binaries,-->
+<!--                as the build script was configured to only inject the bad code in-->
+<!--                Debian/Fedora based package build environments. The news item below can-->
+<!--                therefore mostly be ignored.&lt;/p&gt;-->
+<!--                &lt;p&gt;We are closely monitoring the situation and will update the package and-->
+<!--                news as neccesary.&lt;/p&gt;-->
+<!--                &lt;hr /&gt;-->
+<!--                &lt;p&gt;TL;DR: Upgrade your systems and container images &lt;strong&gt;now&lt;/strong&gt;!&lt;/p&gt;-->
+<!--                &lt;p&gt;As many of you may have already read (&lt;a-->
+<!--                href="https://www.openwall.com/lists/oss-security/2024/03/29/4"&gt;one&lt;/a&gt;), the upstream release-->
+<!--                tarballs for &lt;code&gt;xz&lt;/code&gt; in version &lt;code&gt;5.6.0&lt;/code&gt; and &lt;code&gt;5.6.1&lt;/code&gt;-->
+<!--                contain malicious code which adds a backdoor.&lt;/p&gt;-->
+<!--                &lt;p&gt;This vulnerability is tracked in the Arch Linux security tracker (&lt;a-->
+<!--                href="https://security.archlinux.org/ASA-202403-1"&gt;two&lt;/a&gt;).&lt;/p&gt;-->
+<!--                &lt;p&gt;The &lt;code&gt;xz&lt;/code&gt; packages prior to version &lt;code&gt;5.6.1-2&lt;/code&gt;-->
+<!--                (specifically &lt;code&gt;5.6.0-1&lt;/code&gt; and &lt;code&gt;5.6.1-1&lt;/code&gt;) contain this-->
+<!--                backdoor.&lt;/p&gt;-->
+<!--                &lt;p&gt;The following release artifacts contain the compromised &lt;code&gt;xz&lt;/code&gt;:&lt;/p&gt;-->
+<!--                &lt;ul&gt;-->
+<!--                &lt;li&gt;installation medium &lt;code&gt;2024.03.01&lt;/code&gt;&lt;/li&gt;-->
+<!--                &lt;li&gt;virtual machine images &lt;code&gt;20240301.218094&lt;/code&gt; and &lt;code&gt;20240315.221711&lt;/code&gt;&lt;/li&gt;-->
+<!--                &lt;li&gt;container images created between and including &lt;em&gt;2024-02-24&lt;/em&gt; and &lt;em&gt;2024-03-28&lt;/em&gt;&lt;/li&gt;-->
+<!--                &lt;/ul&gt;-->
+<!--                &lt;p&gt;The affected release artifacts have been removed from our mirrors.&lt;/p&gt;-->
+<!--                &lt;p&gt;We strongly advise against using affected release artifacts and instead downloading what is-->
+<!--                currently available as latest version!&lt;/p&gt;-->
+<!--                &lt;h2&gt;Upgrading the system&lt;/h2&gt;-->
+<!--                &lt;p&gt;It is strongly advised to do a full system upgrade right away if your system currently has &lt;code&gt;xz&lt;/code&gt;-->
+<!--                version &lt;code&gt;5.6.0-1&lt;/code&gt; or &lt;code&gt;5.6.1-1&lt;/code&gt; installed:&lt;/p&gt;-->
+<!--                &lt;p&gt;&lt;code&gt;pacman -Syu&lt;/code&gt;&lt;/p&gt;-->
+<!--                &lt;h2&gt;Upgrading container images&lt;/h2&gt;-->
+<!--                &lt;p&gt;To figure out if you are using an affected container image, use either&lt;/p&gt;-->
+<!--                &lt;p&gt;&lt;code&gt;podman image history archlinux/archlinux&lt;/code&gt;&lt;/p&gt;-->
+<!--                &lt;p&gt;or&lt;/p&gt;-->
+<!--                &lt;p&gt;&lt;code&gt;docker image history archlinux/archlinux&lt;/code&gt;&lt;/p&gt;-->
+<!--                &lt;p&gt;depending on whether you use &lt;code&gt;podman&lt;/code&gt; or &lt;code&gt;docker&lt;/code&gt;.&lt;/p&gt;-->
+<!--                &lt;p&gt;Any Arch Linux container image older than &lt;code&gt;2024-03-29&lt;/code&gt; and younger than-->
+<!--                &lt;code&gt;2024-02-24&lt;/code&gt; is affected.&lt;/p&gt;-->
+<!--                &lt;p&gt;Run either&lt;/p&gt;-->
+<!--                &lt;p&gt;&lt;code&gt;podman image pull archlinux/archlinux&lt;/code&gt;&lt;/p&gt;-->
+<!--                &lt;p&gt;or&lt;/p&gt;-->
+<!--                &lt;p&gt;&lt;code&gt;docker image pull archlinux/archlinux&lt;/code&gt;&lt;/p&gt;-->
+<!--                &lt;p&gt;to upgrade affected container images to the most recent version.&lt;/p&gt;-->
+<!--                &lt;p&gt;Afterwards make sure to rebuild any container images based on the affected versions and also-->
+<!--                inspect any running containers!&lt;/p&gt;-->
+<!--                &lt;h2&gt;Regarding sshd authentication bypass/code execution&lt;/h2&gt;-->
+<!--                &lt;p&gt;From the upstream report (&lt;a href="https://www.openwall.com/lists/oss-security/2024/03/29/4"&gt;one&lt;/a&gt;):&lt;/p&gt;-->
+<!--                &lt;blockquote&gt;-->
+<!--                &lt;p&gt;openssh does not directly use liblzma. However debian and several other-->
+<!--                distributions patch openssh to support systemd notification, and libsystemd-->
+<!--                does depend on lzma.&lt;/p&gt;-->
+<!--                &lt;/blockquote&gt;-->
+<!--                &lt;p&gt;Arch does not directly link openssh to liblzma, and thus this attack vector is not possible.-->
+<!--                You can confirm this by issuing the following command:&lt;/p&gt;-->
+<!--                &lt;p&gt;&lt;code&gt;ldd "$(command -v sshd)"&lt;/code&gt;&lt;/p&gt;-->
+<!--                &lt;p&gt;However, out of an abundance of caution, we advise users to remove the malicious code from-->
+<!--                their system by upgrading either way. This is because other yet-to-be discovered methods to exploit the-->
+<!--                backdoor could exist.&lt;/p&gt;-->
+<!--            </description>-->
+<!--            <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">David Runge</dc:creator>-->
+<!--            <pubDate>Fri, 29 Mar 2024 18:55:55 +0000</pubDate>-->
+<!--            <guid isPermaLink="false">tag:archlinux.org,2024-03-29:/news/the-xz-package-has-been-backdoored/</guid>-->
+<!--        </item>-->
+<!--        <item>-->
+<!--            <title>mkinitcpio hook migration and early microcode</title>-->
+<!--            <link>https://archlinux.org/news/mkinitcpio-hook-migration-and-early-microcode/</link>-->
+<!--            <description>&lt;p&gt;With the release of &lt;a-->
+<!--                href="https://lists.archlinux.org/hyperkitty/list/arch-projects@lists.archlinux.org/thread/PZHWLVJLN5EPW6EVK2HEKVBDBNZWHREN/"&gt;mkinitcpio-->
+<!--                v38&lt;/a&gt;, several hooks previously provided by Arch packages have been-->
+<!--                moved to the mkinitcpio upstream project. The hooks are: systemd, udev, encrypt,-->
+<!--                sd-encrypt, lvm2 and mdadm_udev.&lt;/p&gt;-->
+<!--                &lt;p&gt;To ensure no breakage of users' setup occurs, temporary-->
+<!--                conflicts have been introduced into the respective packages to prevent installing packages-->
+<!--                that are no longer compatible.&lt;/p&gt;-->
+<!--                &lt;p&gt;The following packages needs to be upgraded together:&lt;/p&gt;-->
+<!--                &lt;ul&gt;-->
+<!--                &lt;li&gt;mkinitcpio 38-3&lt;/li&gt;-->
+<!--                &lt;li&gt;systemd 255.4-2&lt;/li&gt;-->
+<!--                &lt;li&gt;lvm2 2.03.23-3&lt;/li&gt;-->
+<!--                &lt;li&gt;mdadm 4.3-2&lt;/li&gt;-->
+<!--                &lt;li&gt;cryptsetup 2.7.0-3&lt;/li&gt;-->
+<!--                &lt;/ul&gt;-->
+<!--                &lt;p&gt;Please note that the &lt;code&gt;mkinitcpio&lt;/code&gt; flag &lt;code&gt;&#45;&#45;microcode&lt;/code&gt;,-->
+<!--                and the &lt;code&gt;microcode&lt;/code&gt; option in the preset files, has been deprecated in favour of-->
+<!--                a new &lt;code&gt;microcode&lt;/code&gt; hook. This also allows you to drop the microcode &lt;code&gt;initrd&lt;/code&gt;-->
+<!--                lines from your boot configuration as they are now packed together with the main initramfs image.&lt;/p&gt;-->
+<!--            </description>-->
+<!--            <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Morten Linderud</dc:creator>-->
+<!--            <pubDate>Mon, 04 Mar 2024 17:14:12 +0000</pubDate>-->
+<!--            <guid isPermaLink="false">-->
+<!--                tag:archlinux.org,2024-03-04:/news/mkinitcpio-hook-migration-and-early-microcode/-->
+<!--            </guid>-->
+<!--        </item>-->
+<!--        <item>-->
+<!--            <title>Making dbus-broker our default D-Bus daemon</title>-->
+<!--            <link>https://archlinux.org/news/making-dbus-broker-our-default-d-bus-daemon/</link>-->
+<!--            <description>&lt;p&gt;We are making &lt;code&gt;dbus-broker&lt;/code&gt; our default implementation of-->
+<!--                D-Bus, for-->
+<!--                improved performance, reliability and integration with systemd.&lt;/p&gt;-->
+<!--                &lt;p&gt;For the foreseeable future we will still support the use of &lt;code&gt;dbus-daemon&lt;/code&gt;,-->
+<!--                the previous implementation. Pacman will ask you whether to install-->
+<!--                &lt;code&gt;dbus-broker-units&lt;/code&gt; or &lt;code&gt;dbus-daemon-units&lt;/code&gt;. We recommend-->
+<!--                picking the-->
+<!--                default.&lt;/p&gt;-->
+<!--                &lt;p&gt;For a more detailed rationale, please see our &lt;a-->
+<!--                href="https://gitlab.archlinux.org/archlinux/rfcs/-/blob/master/rfcs/0025-dbus-broker-default.rst"&gt;RFC-->
+<!--                25&lt;/a&gt;.&lt;/p&gt;-->
+<!--            </description>-->
+<!--            <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Jan Alexander Steffens</dc:creator>-->
+<!--            <pubDate>Tue, 09 Jan 2024 16:59:30 +0000</pubDate>-->
+<!--            <guid isPermaLink="false">tag:archlinux.org,2024-01-09:/news/making-dbus-broker-our-default-d-bus-daemon/-->
+<!--            </guid>-->
+<!--        </item>-->
+        <item>
+            <title>Bugtracker migration to GitLab completed</title>
+            <link>https://archlinux.org/news/bugtracker-migration-to-gitlab-completed/</link>
+            <description>&lt;p&gt;We are happy to announce that the &lt;a
+                href="https://lists.archlinux.org/hyperkitty/list/arch-dev-public@lists.archlinux.org/thread/WYXDTJ3TR2DWRQCDZK44BQDH67IDVGTS/"&gt;migration
+                of the bugtracker to GitLab&lt;/a&gt; is done! 🥳 &lt;/p&gt;
+                &lt;p&gt;Thanks to everyone who has helped during the migration!&lt;/p&gt;
+                &lt;p&gt;This means the issue tracker and merge requests on the GitLab package repos are now enabled.&lt;/p&gt;
+                &lt;p&gt;The old bugtracker will subsequently be closed down. For archiving reasons there will be a
+                static copy so that links (for example the randomly picked &lt;a
+                href="https://bugs.archlinux.org/task/56716"&gt;Task #56716&lt;/a&gt;) are still stable, migrated bugs
+                have a closing comment pointing to the new URL on GitLab.&lt;/p&gt;
+                &lt;p&gt;Packaging bugs are now opened on the repo hosting the corresponding packaging sources, the "Add
+                a new Bug" button on the package page on archlinux.org will automatically direct you to the correct
+                place to open the issue. The workflow afterwards is mostly the same, first our &lt;a
+                href="https://gitlab.archlinux.org/groups/archlinux/teams/bug-wranglers/-/group_members"&gt;Bug
+                Wranglers&lt;/a&gt; will have a look at the issues and triage them, and then they will be handed over to
+                the respective &lt;a href="https://gitlab.archlinux.org/archlinux/teams/package-maintainer-team"&gt;Package
+                Maintainers&lt;/a&gt; to fix. A list of all issues can be found &lt;a
+                href="https://gitlab.archlinux.org/groups/archlinux/packaging/-/issues"&gt;here&lt;/a&gt;.&lt;/p&gt;
+                &lt;p&gt;If you do not have an account for GitLab already (which authenticates against our &lt;a
+                href="https://accounts.archlinux.org/"&gt;SSO service&lt;/a&gt;), please write us a mail with your
+                desired username to accountsupport@archlinux.org as advised in the banner.&lt;/p&gt;
+            </description>
+            <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Christian Heusel</dc:creator>
+            <pubDate>Sun, 03 Dec 2023 23:01:42 +0000</pubDate>
+            <guid isPermaLink="false">tag:archlinux.org,2023-12-03:/news/bugtracker-migration-to-gitlab-completed/
+            </guid>
+        </item>
+        <item>
+            <title>Incoming changes in JDK / JRE 21 packages may require manual intervention</title>
+            <link>https://archlinux.org/news/incoming-changes-in-jdk-jre-21-packages-may-require-manual-intervention/
+            </link>
+            <description>&lt;p&gt;We are introducing a change in JDK/JRE packages of our distro. This is
+                triggered from the way a JRE is build in modern versions of Java (&amp;gt;9). We are
+                introducing this change in Java 21.&lt;/p&gt;
+                &lt;p&gt;To sum it up instead of having JDK and JRE packages coexist in the same system
+                we will be making them conflict. The JDK variant package includes the runtime
+                environment to execute Java applications so if one needs compilation and
+                runtime of Java they need only the JDK package in the future. If, on the other
+                hand, they need just runtime of Java then JRE (or jre-headless) will work.&lt;/p&gt;
+                &lt;p&gt;This will (potentially) require a manual user action during upgrade:&lt;/p&gt;
+                &lt;ul&gt;
+                &lt;li&gt;If you have both JDK and JRE installed you can manually install the JDK
+                with &lt;code&gt;pacman -Sy jdk-openjdk &amp;amp;&amp;amp; pacman -Su&lt;/code&gt; and this removes the
+                JRE related packages.&lt;/li&gt;
+                &lt;li&gt;If you have both JRE and JRE-headless you will need to choose one of
+                them and install it manually since they would conflict each other now.&lt;/li&gt;
+                &lt;li&gt;If you only have one of the JDK/JRE/JRE-headless pacman should resolve
+                dependencies normally and no action is needed.&lt;/li&gt;
+                &lt;/ul&gt;
+                &lt;p&gt;At the moment this is only valid for the upcoming JDK 21 release, with other versions to
+                follow.&lt;/p&gt;
+            </description>
+            <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Frederik Schwan</dc:creator>
+            <pubDate>Thu, 02 Nov 2023 10:51:53 +0000</pubDate>
+            <guid isPermaLink="false">
+                tag:archlinux.org,2023-11-02:/news/incoming-changes-in-jdk-jre-21-packages-may-require-manual-intervention/
+            </guid>
+        </item>
+        <item>
+            <title>Changes to default password hashing algorithm and umask settings</title>
+            <link>https://archlinux.org/news/changes-to-default-password-hashing-algorithm-and-umask-settings/</link>
+            <description>&lt;p&gt;With &lt;em&gt;shadow&lt;/em&gt; &amp;gt;= &lt;code&gt;4.14.0&lt;/code&gt;, Arch
+                Linux's default password hashing algorithm changed from &lt;strong&gt;SHA512&lt;/strong&gt; to &lt;a
+                href="https://www.openwall.com/yescrypt/"&gt;&lt;strong&gt;yescrypt&lt;/strong&gt;&lt;/a&gt;.&lt;/p&gt;
+                &lt;p&gt;Furthermore, the &lt;a href="https://man.archlinux.org/man/umask.1p"&gt;&lt;code&gt;umask&lt;/code&gt;&lt;/a&gt;
+                settings are now configured in &lt;code&gt;/etc/login.defs&lt;/code&gt; instead of &lt;code&gt;/etc/profile&lt;/code&gt;.&lt;/p&gt;
+                &lt;p&gt;This should not require any manual intervention.&lt;/p&gt;
+                &lt;h2&gt;Reasons for Yescrypt&lt;/h2&gt;
+                &lt;p&gt;The password-based key derivation function (KDF) and password hashing scheme &lt;strong&gt;yescrypt&lt;/strong&gt;
+                has been chosen due to its adoption (readily available in &lt;em&gt;libxcrypt&lt;/em&gt;, which is used
+                by &lt;a href="https://wiki.archlinux.org/title/PAM"&gt;&lt;em&gt;pam&lt;/em&gt;&lt;/a&gt;) and its
+                stronger resilience towards password cracking attempts over &lt;strong&gt;SHA512&lt;/strong&gt;.&lt;/p&gt;
+                &lt;p&gt;Although the winner of the &lt;a href="https://www.password-hashing.net/"&gt;Password Hashing
+                Competition&lt;/a&gt; has been &lt;strong&gt;argon2&lt;/strong&gt;, this algorithm is not yet available
+                in &lt;em&gt;libxcrypt&lt;/em&gt; (&lt;a href="https://github.com/besser82/libxcrypt/pull/113"&gt;attempt
+                one&lt;/a&gt;, &lt;a href="https://github.com/besser82/libxcrypt/pull/150"&gt;attempt two&lt;/a&gt;).&lt;/p&gt;
+                &lt;h2&gt;Configuring yescrypt&lt;/h2&gt;
+                &lt;p&gt;The &lt;code&gt;YESCRYPT_COST_FACTOR&lt;/code&gt; setting in &lt;code&gt;/etc/login.defs&lt;/code&gt;
+                is currently without effect, &lt;a href="https://github.com/linux-pam/linux-pam/issues/607"&gt;until
+                &lt;em&gt;pam&lt;/em&gt; implements reading its value&lt;/a&gt;. If a &lt;code&gt;YESCRYPT_COST_FACTOR&lt;/code&gt;
+                higher (or lower) than the default (&lt;code&gt;5&lt;/code&gt;) is needed, it can be set using the &lt;code&gt;rounds&lt;/code&gt;
+                option of the &lt;a href="https://man.archlinux.org/man/pam_unix.8"&gt;&lt;code&gt;pam_unix&lt;/code&gt;&lt;/a&gt;
+                module (i.e. in &lt;code&gt;/etc/pam.d/system-auth&lt;/code&gt;).&lt;/p&gt;
+                &lt;h2&gt;General list of changes&lt;/h2&gt;
+                &lt;ul&gt;
+                &lt;li&gt;&lt;strong&gt;yescrypt&lt;/strong&gt; is used as default password hashing algorithm, instead
+                of &lt;strong&gt;SHA512&lt;/strong&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;em&gt;pam&lt;/em&gt; honors the chosen &lt;code&gt;ENCRYPT_METHOD&lt;/code&gt; in &lt;code&gt;/etc/login.defs&lt;/code&gt;
+                and does not override the chosen method anymore&lt;/li&gt;
+                &lt;li&gt;changes in the &lt;em&gt;filesystem&lt;/em&gt; (&amp;gt;= &lt;code&gt;2023.09.18&lt;/code&gt;)
+                and &lt;em&gt;pambase&lt;/em&gt; (&amp;gt;= &lt;code&gt;20230918&lt;/code&gt;) packages ensure, that
+                &lt;code&gt;umask&lt;/code&gt; is set centrally in &lt;code&gt;/etc/login.defs&lt;/code&gt; instead of
+                &lt;code&gt;/etc/profile&lt;/code&gt;&lt;/li&gt;
+                &lt;/ul&gt;
+            </description>
+            <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">David Runge</dc:creator>
+            <pubDate>Fri, 22 Sep 2023 20:26:30 +0000</pubDate>
+            <guid isPermaLink="false">
+                tag:archlinux.org,2023-09-22:/news/changes-to-default-password-hashing-algorithm-and-umask-settings/
+            </guid>
+        </item>
+    </channel>
+</rss>
