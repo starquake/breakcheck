@@ -2,28 +2,47 @@ package main
 
 import (
 	"bytes"
-	"encoding/json"
+	"context"
 	"encoding/xml"
-	"errors"
 	"fmt"
+	"github.com/starquake/breakcheck/store"
 	"io"
 	"log/slog"
 	"net/http"
 	"os"
-	"slices"
+	"time"
 )
 
 const (
-	archNewsURL = "https://archlinux.org/feeds/news/"
-	// archNewsURL   = "http://localhost:8080/fakenews.xml"
-	storeFile     = "/var/lib/breakcheck.json"
-	writeFileMode = 0o600
+	archNewsURL        = "https://archlinux.org/feeds/news/"
+	storeFile          = "/var/lib/breakcheck.json"
+	httpRequestTimeout = 30 * time.Second
 )
 
-const (
-	RetrieveNewsDataFailedErrorCode      = 100
-	DecodeNewsDataFailedErrorCode        = 101
-	LoadSeenItemsFromFileFailedErrorCode = 102
+type ApplicationError struct {
+	Code    int
+	Message string
+	Err     error
+}
+
+func (e *ApplicationError) Error() string {
+	if e.Err != nil {
+		return fmt.Sprintf("%s: (code %d): %v", e.Message, e.Code, e.Err)
+	}
+
+	return fmt.Sprintf("%s: (code %d)", e.Message, e.Code)
+}
+
+func (e *ApplicationError) Unwrap() error { return e.Err }
+
+//nolint:mnd //These are note magic numbers, they are actual errorcodes
+var (
+	ErrLoadStoreFromFileFailedError = &ApplicationError{Code: 100, Message: "error loading store from file"}
+	ErrCreatingRequestFailedError   = &ApplicationError{Code: 101, Message: "error creating request"}
+	ErrRetrieveNewsDataFailedError  = &ApplicationError{Code: 102, Message: "retrieve news data failed"}
+	ErrReadNewsDataFailedError      = &ApplicationError{Code: 103, Message: "read news data failed"}
+	ErrDecodeNewsDataFailedError    = &ApplicationError{Code: 104, Message: "decode news data failed"}
+	ErrSaveStoreToFieldError        = &ApplicationError{Code: 105, Message: "save store to field failed"}
 )
 
 type Rss struct {
@@ -31,90 +50,118 @@ type Rss struct {
 }
 
 type Channel struct {
-	Title         string `xml:"title"`
-	Link          string `xml:"link"`
 	LastBuildDate string `xml:"lastBuildDate"`
-	Description   string `xml:"description"`
-	Items         []Item `xml:"item"`
 }
 
-type Item struct {
-	Title       string `xml:"title"`
-	Link        string `xml:"link"`
-	Description string `xml:"description"`
-}
+func run(ctx context.Context) (bool, *ApplicationError) {
+	slog.Debug("about to load store")
+	breakcheckStore := &store.Store{}
 
-func main() {
-	slog.Debug("about to retrieve news data")
-	newsData, err := retrieveNewsData()
+	err := breakcheckStore.LoadStoreFromFile(storeFile)
 	if err != nil {
-		fmt.Printf("could not get news data: %v\n", err)
-		os.Exit(RetrieveNewsDataFailedErrorCode)
+		return false, &ApplicationError{
+			Code:    ErrLoadStoreFromFileFailedError.Code,
+			Message: ErrLoadStoreFromFileFailedError.Message,
+			Err:     err,
+		}
+	}
+
+	reqCtx, cancel := context.WithTimeout(ctx, httpRequestTimeout)
+	defer cancel()
+
+	req, err := CreateRequest(reqCtx, breakcheckStore)
+	if err != nil {
+		return false, &ApplicationError{
+			Code:    ErrCreatingRequestFailedError.Code,
+			Message: ErrCreatingRequestFailedError.Message,
+			Err:     err,
+		}
+	}
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return false, &ApplicationError{
+			Code:    ErrRetrieveNewsDataFailedError.Code,
+			Message: ErrRetrieveNewsDataFailedError.Message,
+			Err:     err,
+		}
+	}
+	defer closeBody(resp)
+
+	if resp.StatusCode == http.StatusNotModified {
+		slog.Debug("news feed has not modified", "headerLastModified", breakcheckStore.HeaderLastModified)
+
+		return false, nil
+	}
+
+	breakcheckStore.HeaderLastModified = resp.Header.Get("Last-Modified")
+
+	newsData, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return false, &ApplicationError{
+			Code:    ErrReadNewsDataFailedError.Code,
+			Message: ErrReadNewsDataFailedError.Message,
+			Err:     err,
+		}
 	}
 
 	slog.Debug("about to decode RSS")
 	rss, err := decodeRss(newsData)
 	if err != nil {
-		fmt.Printf("could not decode news data: %v\n", err)
-		os.Exit(DecodeNewsDataFailedErrorCode)
-	}
-
-	slog.Debug("about to load seen items")
-	seenItems, err := loadSeenItemsFromFile(storeFile)
-	if err != nil {
-		fmt.Printf("could not decode news data: %v\n", err)
-		os.Exit(LoadSeenItemsFromFileFailedErrorCode)
-	}
-
-	unseenItems := make([]string, 0)
-	items := make([]string, 0, len(rss.Channel.Items))
-
-	slog.Debug("process rss items")
-	for _, item := range rss.Channel.Items {
-		if !slices.Contains(seenItems, item.Link) {
-			slog.Debug("found unseen item, storing", "title", item.Title, "link", item.Link)
-			unseenItems = append(unseenItems, item.Link)
+		return false, &ApplicationError{
+			Code:    ErrDecodeNewsDataFailedError.Code,
+			Message: ErrDecodeNewsDataFailedError.Message,
+			Err:     err,
 		}
-		items = append(items, item.Link)
 	}
 
-	if len(unseenItems) == 0 {
-		os.Exit(0)
-
-		return
+	if rss.Channel.LastBuildDate == breakcheckStore.FeedLastBuildDate {
+		// No news, no error
+		return false, nil
 	}
 
-	err = saveSeenItemsToFile(items, storeFile)
+	breakcheckStore.FeedLastBuildDate = rss.Channel.LastBuildDate
+
+	err = breakcheckStore.SaveStoreToFile(storeFile)
 	if err != nil {
-		fmt.Printf("could not save seen newHashedItems to file: %v\n", err)
+		return false, &ApplicationError{
+			Code:    ErrSaveStoreToFieldError.Code,
+			Message: ErrSaveStoreToFieldError.Message,
+			Err:     err,
+		}
 	}
 
-	fmt.Printf("There have been one or more unread news items:\n")
-	for _, item := range unseenItems {
-		fmt.Printf("Link: %s\n", item)
-	}
-	fmt.Printf("\n")
+	fmt.Printf("News has been updated.\n")
 	fmt.Printf("Make sure you have read the news items and restart the upgrade to complete.\n")
 	fmt.Printf("\n")
 
-	os.Exit(1)
+	return true, nil
 }
 
-func retrieveNewsData() ([]byte, error) {
-	slog.Debug("retrieving news")
-	resp, err := http.Get(archNewsURL)
-	if err != nil {
-		return nil, fmt.Errorf("request for newsfeed failed: %w", err)
-	}
-	defer closeBody(resp)
+func CreateRequest(ctx context.Context, store *store.Store) (*http.Request, error) {
 
-	slog.Debug("reading news")
-	newsData, err := io.ReadAll(resp.Body)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, archNewsURL, nil)
 	if err != nil {
-		return nil, fmt.Errorf("could not read newsfeed: %w", err)
+		return nil, err
 	}
+	req.Header.Add("User-Agent", "breakcheck")
+	req.Header.Add("Accept", "application/rss+xml")
+	req.Header.Add("If-Modified-Since", store.HeaderLastModified)
 
-	return newsData, err
+	return req, nil
+}
+
+func main() {
+	ctx := context.Background()
+	news, err := run(ctx)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "%v\n", err)
+		os.Exit(err.Code)
+	}
+	if news {
+		os.Exit(1)
+	}
+	os.Exit(0)
 }
 
 func decodeRss(newsData []byte) (*Rss, error) {
@@ -138,50 +185,4 @@ func closeBody(resp *http.Response) {
 	if err != nil {
 		panic(fmt.Errorf("failed to close http request body: %w", err))
 	}
-}
-
-func loadSeenItemsFromFile(filename string) ([]string, error) {
-	var seenBeforeItems []string
-	slog.Debug("checking if seen items exist")
-	_, err := os.Stat(filename)
-	if err != nil {
-		// Fail if it's any error other than ErrNotExist
-		if !errors.Is(err, os.ErrNotExist) {
-			return nil, fmt.Errorf("checking if seen_items.json exists failed: %w", err)
-		}
-
-		// First run!
-		slog.Debug("seen items does not exist: first run")
-
-		return seenBeforeItems, nil
-	}
-
-	slog.Debug("seen items exist, reading seen items")
-	jsonData, err := os.ReadFile(filename)
-	if err != nil {
-		return nil, fmt.Errorf("could not read seen items.json: %w", err)
-	}
-	slog.Debug("unmarshalling seen items")
-	err = json.Unmarshal(jsonData, &seenBeforeItems)
-	if err != nil {
-		return nil, fmt.Errorf("could not unmarshal seen_items.json: %w", err)
-	}
-
-	return seenBeforeItems, nil
-}
-
-func saveSeenItemsToFile(seenAfterItems []string, filename string) error {
-	slog.Debug("marshalling seen items")
-	jsonString, err := json.Marshal(seenAfterItems)
-	if err != nil {
-		return fmt.Errorf("could not marshal seenAfterItems: %w", err)
-	}
-
-	slog.Debug("saving seen items")
-	err = os.WriteFile(filename, jsonString, writeFileMode)
-	if err != nil {
-		return fmt.Errorf("could not save the seen items: %w", err)
-	}
-
-	return nil
 }

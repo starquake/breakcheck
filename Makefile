@@ -1,7 +1,12 @@
 SHELL=/bin/bash -o pipefail
 
 .PHONY: all
-all: lint build test
+all: clean lint build test
+
+.PHONY: clean
+clean:
+	rm -rf bin
+	mkdir -p bin
 
 .PHONY: lint
 lint:
