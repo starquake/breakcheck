@@ -4,11 +4,9 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
-	"net/http"
 	"os"
 
-	"github.com/starquake/breakcheck/check"
-	"github.com/starquake/breakcheck/feed"
+	"github.com/starquake/breakcheck/checker"
 	"github.com/starquake/breakcheck/store"
 )
 
@@ -32,60 +30,28 @@ func run(ctx context.Context) (bool, error) {
 		return false, fmt.Errorf("error loading store from file: %w", err)
 	}
 
-	resp, err := check.Request(ctx, breakcheckStore.HeaderLastModified, archNewsURL)
+	resp, err := checker.Check(ctx, archNewsURL, breakcheckStore.HeaderLastModified, breakcheckStore.FeedLastBuildDate)
 	if err != nil {
-		return false, fmt.Errorf("error executing Request: %w", err)
+		return false, fmt.Errorf("error executing Check: %w", err)
 	}
 
-	if resp.Status == http.StatusNotModified {
-		// No change, so return false with no error
-		return false, nil
+	if !resp.Changed {
+		return resp.Changed, nil
 	}
 
 	breakcheckStore.HeaderLastModified = resp.HeaderLastModified
-	err = saveToStore(breakcheckStore)
+	breakcheckStore.FeedLastBuildDate = resp.FeedLastModified
+
+	err = breakcheckStore.SaveStoreToFile(storeFile)
 	if err != nil {
-		return false, fmt.Errorf("error saving store to file after setting HeaderLastModified: %w", err)
-	}
-
-	lastBuildDate, decodeErr := feed.LastBuildDate(resp.ResponseData)
-	if decodeErr != nil {
-		return false, fmt.Errorf("error getting last build date: %w", decodeErr)
-	}
-
-	if lastBuildDate == "" {
-		return false, nil
-	}
-
-	// We have a response, so there could be check
-	// but let's check if the feed LastBuild Date is newer just to be sure
-
-	if lastBuildDate == breakcheckStore.FeedLastBuildDate {
-		// No check, no error
-		return false, nil
-	}
-
-	// Update that we've seen a check
-	breakcheckStore.FeedLastBuildDate = lastBuildDate
-	err = saveToStore(breakcheckStore)
-	if err != nil {
-		return false, fmt.Errorf("error saving store to file after update FeedLastBuildDate: %w", err)
+		return resp.Changed, fmt.Errorf("error saving store to file: %w", err)
 	}
 
 	fmt.Println("News has been updated.")
 	fmt.Println("Make sure you have read the check items and restart the upgrade to complete.")
 	fmt.Println("")
 
-	return true, nil
-}
-
-func saveToStore(breakcheckStore *store.Store) error {
-	err := breakcheckStore.SaveStoreToFile(storeFile)
-	if err != nil {
-		return fmt.Errorf("error saving store to file: %w", err)
-	}
-
-	return nil
+	return resp.Changed, nil
 }
 
 func main() {
