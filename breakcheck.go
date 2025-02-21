@@ -72,9 +72,9 @@ func run(ctx context.Context) (bool, error) {
 		return false, fmt.Errorf("error saving store to file after update FeedLastBuildDate: %w", err)
 	}
 
-	fmt.Printf("News has been updated.\n")
-	fmt.Printf("Make sure you have read the check items and restart the upgrade to complete.\n")
-	fmt.Printf("\n")
+	fmt.Println("News has been updated.")
+	fmt.Println("Make sure you have read the check items and restart the upgrade to complete.")
+	fmt.Println("")
 
 	return true, nil
 }
